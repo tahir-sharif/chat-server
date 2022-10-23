@@ -111,6 +111,14 @@ const getMe = async (req, res) => {
   }
 };
 
+const searchUsers = async (req, res) => {
+  const keywords = req.query?.q || "tahir"
+  const reg = new RegExp(keywords, "i")
+  const result = await User.find({ name: reg }).select("_id name profileImage")
+  console.log("---searched for", keywords);
+  res.json(result)
+}
+
 // helpers
 const getChats = async () => {
   const chats = await User.find().select("-password");
@@ -121,4 +129,4 @@ const generateToken = (id) => {
   return token;
 };
 
-module.exports = { registerUser, loginUser, canRegister, getMe };
+module.exports = { registerUser, loginUser, canRegister, getMe, searchUsers };
