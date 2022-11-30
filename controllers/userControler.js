@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const checkifUser = async (query, extended) => {
@@ -112,12 +112,12 @@ const getMe = async (req, res) => {
 };
 
 const searchUsers = async (req, res) => {
-  const keywords = req.query?.q || "tahir"
-  const reg = new RegExp(keywords, "i")
-  const result = await User.find({ name: reg }).select("_id name profileImage")
+  const keywords = req.query?.q || "tahir";
+  const reg = new RegExp(keywords, "i");
+  const result = await User.find({ name: reg }).select("_id name profileImage");
   console.log("---searched for", keywords);
-  res.json(result)
-}
+  res.json(result);
+};
 
 // helpers
 const getChats = async () => {
