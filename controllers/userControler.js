@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const bcrypt = require("bcryptjs");
+const passwordHash = require("password-hash");
 const jwt = require("jsonwebtoken");
 
 const checkifUser = async (query, extended) => {
@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
     } else {
       try {
         // hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = passwordHash.generate(password);
         // Finally create a user
         await User.create({
           name,
@@ -57,7 +57,7 @@ const loginUser = async (req, res) => {
 
     if (user) {
       // checking password
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      const passwordMatch = passwordHash.verify(password, user.password);
       // removing password field
       const userTOsend = JSON.parse(JSON.stringify(user));
       delete userTOsend.password;
