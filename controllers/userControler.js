@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
-const passwordHash = require("password-hash");
 const jwt = require("jsonwebtoken");
+const passwordHash = require("password-hash");
 
 const checkifUser = async (query, extended) => {
   const userExists = await User.findOne(query)
