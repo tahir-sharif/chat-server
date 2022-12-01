@@ -8,11 +8,7 @@ const port = process.env.PORT || 6500;
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(
-  cors({
-    "Access-Control-Allow-Origin": "*",
-  })
-);
+app.use(cors());
 
 app.use((req, res, next) => {
   console.log(req.method, req.url, req.body);
