@@ -112,9 +112,14 @@ const getMe = async (req, res) => {
 };
 
 const searchUsers = async (req, res) => {
-  const keywords = req.query?.q || "tahir";
-  const reg = new RegExp(keywords, "i");
-  const result = await User.find({ name: reg }).select("_id name profileImage");
+  const keywords = req.query?.q || "";
+  if (!keywords) {
+    return res.json([]);
+  }
+  const reg = new RegExp(keywords.trim(), "i");
+  const result = await User.find({ name: reg }).select(
+    "_id name profileImage userName"
+  );
   console.log("---searched for", keywords);
   res.json(result);
 };
