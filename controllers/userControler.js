@@ -8,6 +8,11 @@ const checkifUser = async (query, extended) => {
       path: "chats.user",
       model: "User",
       select: "-chats",
+      options: {
+        sort: {
+          updatedAt: -1,
+        },
+      },
     })
     .select("-user.chats");
   if (extended) return userExists;
@@ -36,8 +41,6 @@ const registerUser = async (req, res) => {
           // sending response after registered
           const userTOsend = JSON.parse(JSON.stringify(user));
           delete userTOsend.password;
-          const chats = await getChats();
-
           res.json({ user: userTOsend, token: generateToken(user._id) });
         });
       } catch (error) {
@@ -63,7 +66,6 @@ const loginUser = async (req, res) => {
       delete userTOsend.password;
       if (passwordMatch) {
         // here user can login
-        const chats = await getChats();
 
         res.json({
           user: userTOsend,
@@ -93,11 +95,9 @@ const getMe = async (req, res) => {
   try {
     const user = await checkifUser({ _id: req.user._id.toString() }, true);
     // const user = await User.findById(userId);
-    console.log(user);
     if (user) {
       const userTOsend = JSON.parse(JSON.stringify(user));
       delete userTOsend.password;
-      const chats = await getChats();
 
       res.json({
         user: userTOsend,
@@ -124,11 +124,6 @@ const searchUsers = async (req, res) => {
   res.json(result);
 };
 
-// helpers
-const getChats = async () => {
-  const chats = await User.find().select("-password");
-  return chats;
-};
 const generateToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
   return token;

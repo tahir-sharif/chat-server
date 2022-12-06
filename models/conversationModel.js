@@ -7,7 +7,6 @@ const messageSchema = mongoose.Schema(
       required: true,
     },
     sender: mongoose.Types.ObjectId,
-    reciever: mongoose.Types.ObjectId,
     lastMessage: Object,
   },
   {

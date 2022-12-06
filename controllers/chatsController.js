@@ -31,7 +31,6 @@ const sendMessage = async (req, res) => {
       const messageObj = {
         message,
         sender: senderId,
-        reciever: recieverId,
       };
 
       // first we find a user
@@ -58,13 +57,15 @@ const sendMessage = async (req, res) => {
           const objToset = {
             user: recieverId,
             lastMessage: { ...messageObj, createdAt: Date.now() },
+            createdAt: Date.now(),
           };
           const chatObj = await userModel.findOneAndUpdate(
             { _id: senderId, "chats.user": recieverId },
             { $set: { "chats.$": objToset } }
           );
           // if not in a chat array then push new one
-          if (!chatObj) {
+          if (chatObj) {
+          } else {
             await userModel.updateOne(
               { _id: senderId },
               { $push: { chats: objToset } }
