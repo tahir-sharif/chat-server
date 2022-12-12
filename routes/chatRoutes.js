@@ -7,7 +7,7 @@ const {
   getConversation,
 } = require("../controllers/chatsController");
 
-const protect = require("../middlewares/authentication");
+const { protect } = require("../middlewares/authentication");
 
 router.get("/getchats", protect, getChats);
 

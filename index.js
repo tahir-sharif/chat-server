@@ -5,6 +5,8 @@ var cors = require("cors");
 require("dotenv").config();
 const app = express();
 const { Server } = require("socket.io");
+const { socketProtect } = require("./middlewares/authentication");
+const realTimeSocket = require("./controllers/socket");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -25,9 +27,8 @@ app.use((req, res, next) => {
   next();
 });
 
-io.on("connection", (socket) => {
-  console.log("user connected !");
-});
+// RealTime Connections
+realTimeSocket(io);
 
 // Api Requests
 app.get("/", (req, res) => {

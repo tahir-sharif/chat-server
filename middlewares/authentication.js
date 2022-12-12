@@ -33,4 +33,12 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = protect;
+const socketProtect = (socket, next) => {
+  if (socket.request.headers) {
+    next();
+  } else {
+    next(new Error("unauthorized"));
+  }
+};
+
+module.exports = { protect, socketProtect };
