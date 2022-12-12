@@ -3,20 +3,31 @@ const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 
 const checkifUser = async (query, extended) => {
-  const userExists = await User.findOne(query)
-    .populate({
-      path: "chats.user",
-      model: "User",
-      select: "-chats",
-      options: {
-        sort: {
-          updatedAt: -1,
-        },
-      },
-    })
-    .select("-user.chats");
-  if (extended) return userExists;
-  return userExists !== null;
+  if (extended) {
+    const user = await User.findOne(query)
+      .populate({
+        path: "chats.user",
+        model: "User",
+        select: "-chats",
+      })
+      .select("-user.chats");
+
+    const copied = JSON.parse(JSON.stringify(user));
+    return {
+      ...copied,
+      chats: copied.chats.sort((a, b) => {
+        if (b.createdAt > a.createdAt) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }),
+    };
+    return user;
+  } else {
+    const user = await User.findOne(query);
+    return user !== null;
+  }
 };
 
 const registerUser = async (req, res) => {
@@ -116,12 +127,16 @@ const searchUsers = async (req, res) => {
   if (!keywords) {
     return res.json([]);
   }
-  const reg = new RegExp(keywords.trim(), "i");
-  const result = await User.find({ name: reg }).select(
-    "_id name profileImage userName"
-  );
-  console.log("---searched for", keywords);
-  res.json(result);
+  try {
+    const reg = new RegExp(keywords.trim(), "i");
+    const result = await User.find({ name: reg })
+      .select("_id name profileImage userName")
+      .limit(10);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.json([]);
+  }
 };
 
 const generateToken = (id) => {

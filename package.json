@@ -17,7 +17,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.0",
     "nodemon": "^2.0.20",
-    "password-hash": "^1.2.2"
+    "password-hash": "^1.2.2",
+    "socket.io": "^4.5.4"
   },
   "engines": {
     "node": ">=12",

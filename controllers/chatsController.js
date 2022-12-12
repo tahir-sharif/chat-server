@@ -53,21 +53,20 @@ const sendMessage = async (req, res) => {
         );
 
         // Upadting Main view Chats
-        const upateChatsDataOfUser = async (senderId, recieverId) => {
+        const upateChatsDataOfUser = async (firstId, secondId) => {
           const objToset = {
-            user: recieverId,
+            user: secondId,
             lastMessage: { ...messageObj, createdAt: Date.now() },
             createdAt: Date.now(),
           };
           const chatObj = await userModel.findOneAndUpdate(
-            { _id: senderId, "chats.user": recieverId },
+            { _id: firstId, "chats.user": secondId },
             { $set: { "chats.$": objToset } }
           );
           // if not in a chat array then push new one
-          if (chatObj) {
-          } else {
-            await userModel.updateOne(
-              { _id: senderId },
+          if (!chatObj) {
+            return await userModel.updateOne(
+              { _id: firstId },
               { $push: { chats: objToset } }
             );
           }
