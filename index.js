@@ -14,7 +14,6 @@ const io = require('socket.io')(httpServer, {
       'https://chat-app-tahir150.vercel.app'
     ],
     methods: ['GET', 'POST'],
-    allowedHeaders: ['token'],
     credentials: true
   }
 });
