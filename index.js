@@ -13,7 +13,8 @@ const io = new Server(server, {
       'https://chat-app-git-master-tahir150.vercel.app',
       'http://localhost:6501',
       'https://chat-app-tahir150.vercel.app'
-    ]
+    ],
+    methods: ['GET', 'POST']
   }
 });
 const port = process.env.PORT || 6500;
