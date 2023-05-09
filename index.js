@@ -4,19 +4,21 @@ const http = require('http');
 const cors = require('cors');
 require('dotenv').config();
 const app = express();
-const { Server } = require('socket.io');
 const realTimeSocket = require('./controllers/socket');
-const server = http.createServer(app);
-const io = new Server(server, {
+const httpServer = http.createServer(app);
+const io = require('socket.io')(httpServer, {
   cors: {
     origin: [
       'https://chat-app-git-master-tahir150.vercel.app',
       'http://localhost:6501',
       'https://chat-app-tahir150.vercel.app'
     ],
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['token'],
+    credentials: true
   }
 });
+
 const port = process.env.PORT || 6500;
 
 // middlewares
@@ -58,6 +60,6 @@ app.use((req, res, next) => {
 
 // Connect to the database and start listening
 connectDB();
-server.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
 });
