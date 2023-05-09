@@ -3,8 +3,9 @@ const connectDB = require('./config/db');
 const http = require('http');
 const cors = require('cors');
 require('dotenv').config();
-const app = express();
 const realTimeSocket = require('./controllers/socket');
+
+const app = express();
 const httpServer = http.createServer(app);
 const io = require('socket.io')(httpServer, {
   cors: {
