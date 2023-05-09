@@ -34,8 +34,6 @@ const realTimeSocket = (io) => {
         createdAt
       };
 
-      console.log(messageObj);
-
       if (recieverSocketId) {
         io.to(recieverSocketId).emit('receive-message', messageObj);
         return ack({

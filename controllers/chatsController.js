@@ -165,11 +165,6 @@ const getConversation = async (req, res) => {
   const senderId = req.user._id.toString();
   const { receiverId } = req.params;
   const conversationId = getConversationId(senderId, receiverId);
-
-  console.log('conversationId', conversationId);
-
-  console.log('senderId', senderId);
-  console.log('receiverId', receiverId);
   try {
     const conversation = await conversationModel.findOne({
       conversationId
