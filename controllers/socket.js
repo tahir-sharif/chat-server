@@ -1,15 +1,8 @@
-const cors = require('cors');
 const { socketProtect } = require('../middlewares/authentication');
 const { saveMessageToDB } = require('./chatsController');
 
 const realTimeSocket = (io) => {
   const connectedUsers = new Map();
-
-  // cors
-  io.use((socket, next) => {
-    // Add cors middleware to socket
-    cors()(socket.request, socket.request.res, next);
-  });
 
   // authenticate
   io.use(socketProtect);

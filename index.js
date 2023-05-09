@@ -1,17 +1,20 @@
-const express = require("express");
-const connectDB = require("./config/db");
-const http = require("http");
-const cors = require("cors");
-require("dotenv").config();
+const express = require('express');
+const connectDB = require('./config/db');
+const http = require('http');
+const cors = require('cors');
+require('dotenv').config();
 const app = express();
-const { Server } = require("socket.io");
-const { socketProtect } = require("./middlewares/authentication");
-const realTimeSocket = require("./controllers/socket");
+const { Server } = require('socket.io');
+const realTimeSocket = require('./controllers/socket');
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
-  },
+    origin: [
+      'https://chat-app-git-master-tahir150.vercel.app',
+      'http://localhost:6501',
+      'https://chat-app-tahir150.vercel.app'
+    ]
+  }
 });
 const port = process.env.PORT || 6500;
 
@@ -26,7 +29,7 @@ app.use(cors());
 let requests = 0;
 app.use((req, res, next) => {
   requests++;
-  console.log("Req no. " + requests, req.method, req.url);
+  console.log('Req no. ' + requests, req.method, req.url);
   next();
 });
 
@@ -34,18 +37,21 @@ app.use((req, res, next) => {
 realTimeSocket(io);
 
 // Api Requests
-app.get("/", (req, res) => {
-  res.send("Hello Tahir !");
+app.get('/', (req, res) => {
+  res.send('Hello Tahir !');
 });
 
-app.use("/api/user", require("./routes/userRoutes"));
+app.use('/api/user', require('./routes/userRoutes'));
 
-app.use("/api/chats", require("./routes/chatRoutes"));
+app.use('/api/chats', require('./routes/chatRoutes'));
 
 // Handle CORS errors
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
   next();
 });
 
