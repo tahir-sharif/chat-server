@@ -5,6 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 const realTimeSocket = require('./controllers/socket');
 
+const port = process.env.PORT || 6500;
 const app = express();
 const httpServer = http.createServer(app);
 const io = require('socket.io')(httpServer, {
@@ -19,8 +20,6 @@ const io = require('socket.io')(httpServer, {
     credentials: true
   }
 });
-
-const port = process.env.PORT || 6500;
 
 // middlewares
 app.use(express.json());
